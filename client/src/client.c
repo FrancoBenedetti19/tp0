@@ -55,8 +55,11 @@ int main(void)
 t_log* iniciar_logger(void)
 {
 	t_log* nuevo_logger = log_create("tp0.log","LOGGING",1, LOG_LEVEL_INFO);
+	if(nuevo_logger==NULL){
+		perror("Hubo una falla en el log.No se encontro el archivo o el archivo no existe ");
+	exit(EXIT_FAILURE);
 
-
+	}
 	return nuevo_logger;
 }
 
@@ -98,4 +101,5 @@ void terminar_programa(int conexion, t_log* logger, t_config* config)
 {
 	/* Y por ultimo, hay que liberar lo que utilizamos (conexion, log y config) 
 	  con las funciones de las commons y del TP mencionadas en el enunciado */
+	  log_destroy(logger)
 }
