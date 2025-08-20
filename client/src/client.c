@@ -1,4 +1,6 @@
 #include "client.h"
+#include<readline/readline.h>
+
 
 int main(void)
 {
@@ -47,6 +49,7 @@ int main(void)
 	conexion = crear_conexion(ip, puerto);
 
 	// Enviamos al servidor el valor de CLAVE como mensaje
+	enviar_mensaje(valor,conexion);
 
 	// Armamos y enviamos el paquete
 	paquete(conexion);
@@ -70,7 +73,7 @@ t_log* iniciar_logger(void)
 
 t_config* iniciar_config(void)
 {
-	t_config* nuevo_config = config_create("cliente.config"); 
+	t_config* nuevo_config = config_create("/home/utnso/tp0/client/cliente.config"); 
 	if(nuevo_config == NULL){
 		perror("Erro al cargar el config");
 		exit(EXIT_FAILURE);
@@ -87,6 +90,15 @@ void leer_consola(t_log* logger)
 	leido = readline("> ");
 
 	// El resto, las vamos leyendo y logueando hasta recibir un string vacío
+while (leido!=NULL && strcmp(leido,"")!=0){
+	log_info(logger,"Leido :%s",leido);
+	free(leido);
+	leido=readline("> ");
+}
+free(leido);
+{
+	/* code */
+}
 
 
 	// ¡No te olvides de liberar las lineas antes de regresar!
@@ -96,14 +108,20 @@ void leer_consola(t_log* logger)
 void paquete(int conexion)
 {
 	// Ahora toca lo divertido!
-	char* leido;
-	t_paquete* paquete;
+	char* leido = NULL;
+	t_paquete* paquete = crear_paquete();
 
 	// Leemos y esta vez agregamos las lineas al paquete
-
-
+	leido = readline("> ");
+	while(leido != NULL && strcmp(leido, "") != 0){
+		agregar_a_paquete(paquete,(void*)leido,strlen(leido)+1);
+		free(leido);
+		leido = readline("> ");
+	}
+	free(leido);
+	enviar_paquete(paquete,conexion);
 	// ¡No te olvides de liberar las líneas y el paquete antes de regresar!
-	
+	eliminar_paquete(paquete);
 }
 
 void terminar_programa(int conexion, t_log* logger, t_config* config)
