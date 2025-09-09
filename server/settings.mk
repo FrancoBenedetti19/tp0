@@ -1,5 +1,9 @@
 # Libraries
+<<<<<<< HEAD
 LIBS=commons pthread readline m crypto
+=======
+LIBS=commons pthread readline m
+>>>>>>> d6277a1 (Recupero cambios tras corrupcion de objetos)
 
 # Custom libraries' paths
 SHARED_LIBPATHS=
